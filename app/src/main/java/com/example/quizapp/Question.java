@@ -21,7 +21,7 @@ public class Question implements Parcelable {
 //    we create a number variable for the correct answer; 1 for option1, 2 for option2 and 3 for option3
     private int answerNr;
 
-//    we create a member variable to store the value of the selectd difficulty level
+//    we create a member variable to store the value of the selected difficulty level
     private String difficulty;
 
 //    we then create a variable to pass the category id as a string

@@ -4,11 +4,11 @@ package com.example.quizapp;
 // we create a category class store the content of our category table
 public class Category {
 
-    //    we create a number variable for each category; 1 for PROGRAMMING, 2 for SPORTS and 3 for HISTORY to act as a reference to populate our database the first time
+    //    we create a number variable for each category; 1 for PROGRAMMING, 2 for SPORTS and 3 for TECHNOLOGY to act as a reference to populate our database the first time
 
     public static final int PROGRAMMING = 1;
     public static final int SPORTS = 2;
-    public static final int HISTORY = 3;
+    public static final int TECHNOLOGY = 3;
 
     private int id;
     private String name;
