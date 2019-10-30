@@ -1,48 +1,69 @@
 package com.example.quizapp;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
-public class StartingActivity extends AppCompatActivity {
+public class StartingActivity extends AppCompatActivity implements HighscoreActivity.HighScoreActivityListener {
 
     private static final int REQUEST_CODE_QUIZ = 1;
 
-//    since the difficulty and category are selected in this activity, we create the intent activities that will be sent to the QuizActivity
+    //    since the difficulty and category are selected in this activity, we create the intent activities that will be sent to the QuizActivity
     public static final String EXTRA_CATEGORY_ID = "extraCategoryID";
     public static final String EXTRA_CATEGORY_NAME = "extraCategoryName";
     public static final String EXTRA_DIFFICULTY = "extraDifficulty";
 
-//    the variable name for the shared preference is defined
+    //    the variable name for the shared preference is defined
     public static final String SHARED_PREFS = "sharedPrefs";
 
-//    the key name to store the highscore in the shared preference is defined
-    public static final String KEY_HIGHSCORE = "keyHighscore";
+    public static int score;
 
-    private TextView textViewHighscore;
+    //    the key name to store the highscore in the shared preference is defined
+    public static final String KEY_HIGHSCORE = "keyHighscore";
+    public static final String KEY_CHAMPION = "keyChampion";
+
+    private TextView textViewCurrentScore, textViewChampion, textViewHighscoreScore;
     private Spinner spinnerCategory;
     private Spinner spinnerDifficulty;
 
     private int highscore;
+    private String champion;
+
+    private long backPressedTimeStartActivity;
+    SplashScreenActivity splashScreenActivity = new SplashScreenActivity();
+    MediaPlayer theme = splashScreenActivity.themeSong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starting);
 
-        textViewHighscore = findViewById(R.id.text_view_highscore);
         spinnerCategory = findViewById(R.id.spinner_category);
         spinnerDifficulty = findViewById(R.id.spinner_difficulty);
+        textViewCurrentScore = findViewById(R.id.text_view_current_score);
+        textViewChampion = findViewById(R.id.text_view_highscore_champion);
+        textViewHighscoreScore = findViewById(R.id.text_view_highscore_score);
+
+//        in order to be able to display the current score of the player, we fetch the score from the saved instance state
+//        if (savedInstanceState == null){
+//            score = 0;
+//        }else {
+//            score = savedInstanceState.getInt("keyScore", 0);
+//        }
 
 //        we call the loadCategories method once the quiz activity is launched
         loadCategories();
@@ -52,6 +73,8 @@ public class StartingActivity extends AppCompatActivity {
 
 //        we call the loadHighscore method once the quiz activity is launched
         loadHighscore();
+
+        championName(champion);
 
         Button buttonStartQuiz = findViewById(R.id.button_start_quiz);
 
@@ -63,7 +86,7 @@ public class StartingActivity extends AppCompatActivity {
         });
     }
 
-    private void startQuiz(){
+    private void startQuiz() {
 //        we fetch the selected category item and store it to a selectedCategory variable
         Category selectedCategory = (Category) spinnerCategory.getSelectedItem();
 
@@ -96,19 +119,22 @@ public class StartingActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 //        we compare the equality of the auto generated requestCode to that request_code_quiz that we created
-        if (requestCode == REQUEST_CODE_QUIZ){
+        if (requestCode == REQUEST_CODE_QUIZ) {
 //            if compare for the equality of the auto generated resultCode with the Result_OK we set in our QuizActivity
-            if (resultCode == RESULT_OK){
-                int score = data.getIntExtra(QuizActivity.EXTRA_SCORE,0);
+            if (resultCode == RESULT_OK) {
+                score = data.getIntExtra(QuizActivity.EXTRA_SCORE, 0);
+                textViewCurrentScore.setText("Current Score: " + score);
+
 //                we check if the current score is greater than the current score, we call the updateHighscore method
-                if (score > highscore){
+                if (score > highscore) {
                     updateHighscore(score);
                 }
             }
         }
     }
 
-    private void loadCategories(){
+    //    todo saved instance state was here
+    private void loadCategories() {
 //        we create a variable reference to the QuizDbHelper singleton class called dbHelper and invoke it on this activity
         QuizDbHelper dbHelper = QuizDbHelper.getInstance(this);
 
@@ -126,7 +152,7 @@ public class StartingActivity extends AppCompatActivity {
 
     }
 
-    private void loadDifficultyLevels(){
+    private void loadDifficultyLevels() {
         //        we create a string array variable and store the difficulty array stored in the Question class
         String[] difficultyLevels = Question.getAllDifficultyLevels();
 
@@ -140,22 +166,56 @@ public class StartingActivity extends AppCompatActivity {
         spinnerDifficulty.setAdapter(adapterDifficulty);
     }
 
-    private void loadHighscore(){
+    private void loadHighscore() {
 //        we load the current highscore from the sharedPreference
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         highscore = prefs.getInt(KEY_HIGHSCORE, 0);
-        textViewHighscore.setText("Highscore: " + highscore);
+        textViewHighscoreScore.setText(" " + highscore);
+
 
     }
 
-    private void updateHighscore(int highscoreNew){
-        highscore = highscoreNew;
-        textViewHighscore.setText("Highscore: " + highscore);
+    @Override
+    public void applyText(String name) {
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putString(KEY_CHAMPION, name);
+        edit.apply();
+        champion = name;
+        championName(champion);
+    }
 
-//        we save the current highscore in sharedPrefence
+    private void championName(String nameNew) {
+        champion = nameNew;
+        SharedPreferences preferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        nameNew = preferences.getString(KEY_CHAMPION, "Null");
+        textViewChampion.setText(nameNew);
+    }
+
+    private void updateHighscore(int highscoreNew) {
+        HighscoreActivity highscoreActivity = new HighscoreActivity();
+        highscoreActivity.show(getSupportFragmentManager(), "highscore dialog");
+        highscore = highscoreNew;
+        textViewHighscoreScore.setText(": " + highscore);
+        textViewCurrentScore.setText("Current Score; " + score);
+
+
+//        we save the current highscore in sharedPreference
         SharedPreferences prefs = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(KEY_HIGHSCORE, highscore);
         editor.apply();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedTimeStartActivity + 2000 > System.currentTimeMillis()) {
+//            theme.release();
+//            todo find a way to release song after app exit
+            finish();
+        } else {
+            Toast.makeText(this, "Press Back Again to Finish", Toast.LENGTH_SHORT).show();
+        }
+        backPressedTimeStartActivity = System.currentTimeMillis();
     }
 }

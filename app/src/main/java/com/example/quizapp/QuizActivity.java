@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -322,6 +323,8 @@ public class QuizActivity extends AppCompatActivity {
         finish();
     }
 
+
+
     @Override
     public void onBackPressed() {
 //        checks if the time which the back button was pressed twice successively is < 2secs and calls the finishQuiz method
@@ -357,3 +360,12 @@ public class QuizActivity extends AppCompatActivity {
 
     }
 }
+
+
+    //    we save the current score of the current user in an instance state
+//    @Override
+//    protected void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putInt("score", score);
+//    }
+

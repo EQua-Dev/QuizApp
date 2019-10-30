@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!--    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">-->
+    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:colorPrimary">@color/olive</item>
+        <item name="android:colorPrimaryDark">@color/goldenrod</item>
+        <item name="android:colorAccent">@color/maroon</item>
+    </style>
+
+<!--    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">-->
+<!--        &lt;!&ndash;        &lt;!&ndash; Customize your theme here. &ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="colorPrimary">@color/colorPrimary</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;&lt;!&ndash;        <item name="colorAccent">@color/colorAccent</item>&ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="android:colorAccent">@color/maroon</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;    </style>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <style name="AppTheme">&ndash;&gt;-->
+<!--        <item name="android:colorPrimary">@color/olive</item>-->
+<!--        <item name="android:colorPrimaryDark" tools:ignore="NewApi">@color/goldenrod</item>-->
+<!--        <item name="android:colorAccent" tools:ignore="NewApi">@color/maroon</item>-->
+<!--    </style>-->
+
+<!--    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">-->
+<!--        &lt;!&ndash;        &lt;!&ndash; Customize your theme here. &ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="colorPrimary">@color/colorPrimary</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;&lt;!&ndash;        <item name="colorAccent">@color/colorAccent</item>&ndash;&gt;&ndash;&gt;-->
+<!--        &lt;!&ndash;        <item name="android:colorAccent">@color/maroon</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;    </style>&ndash;&gt;-->
+<!--        &lt;!&ndash;    <style name="AppTheme">&ndash;&gt;-->
+<!--        <item name="android:colorPrimary">@color/olive</item>-->
+<!--        <item name="android:colorPrimaryDark" tools:ignore="NewApi">@color/goldenrod</item>-->
+<!--        <item name="android:colorAccent" tools:ignore="NewApi">@color/maroon</item>-->
+<!--    </style>-->
+
+    <!--    <style name="AppTheme">-->
+<!--        <item name="android:colorPrimary">@color/olive</item>-->
+<!--    </style>-->
+</resources>
